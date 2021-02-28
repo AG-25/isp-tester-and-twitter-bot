@@ -32,3 +32,6 @@ ISP.
 
 ## Supporting Libraries and APIs
 * Selenium (for browser automation and webscraping): https://www.selenium.dev/documentation/en/webdriver/  
+
+## Future Development
+* This program still makes use of time.sleep() while waiting for some webpages to load - I intend to swap in explicit waits shortly. 
