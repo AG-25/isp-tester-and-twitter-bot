@@ -2,13 +2,15 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 
+# Path for Selenium binary. The binary is browser/ operating system specific
+# (see readme for more details)
 CHROME_DRIVER_PATH = r"lib\chromedriver-win.exe"
 
-# This is the Download speed which your ISP promises (in Mb/s)
+# Download speed promised by your ISP (in Mb/s)
 PROMISED_DOWN = '50'
 
-# For the program to send a tweet, you need to provide an email, password, and
-# the twitter handle of your internet service provider (.e.g. @TalkTalkGroup)
+# For the program to send a tweet, you need to provide twitter account details
+# and the handle of your internet service provider (e.g. @TalkTalkGroup)
 TWITTER_EMAIL = ""
 TWITTER_PASSWORD = ""
 ISP_TWITTER_HANDLE = ""
@@ -21,6 +23,8 @@ class InternetSpeedTwitterBot:
         self.up = None
 
     def get_internet_speed(self):
+        """Navigates to 'speedtest.net' and runs an internet speed test"""
+
         self.driver.get("https://www.speedtest.net/")
 
         consent_button = self.driver.find_element_by_css_selector(
@@ -38,6 +42,8 @@ class InternetSpeedTwitterBot:
         self.down = download.text
 
     def tweet_provider(self):
+        """Tweets an internet service provider"""
+
         self.driver.get("https://twitter.com/login")
         time.sleep(1)
         username = self.driver.find_element_by_name("session[username_or_email]")
@@ -69,10 +75,11 @@ class InternetSpeedTwitterBot:
         self.driver.close()
 
 
-speed_bot = InternetSpeedTwitterBot(CHROME_DRIVER_PATH)
-speed_bot.get_internet_speed()
-if float(speed_bot.down) < float(PROMISED_DOWN):
-    print("The internet speed is slower than promised")
-    if TWITTER_EMAIL:
-        speed_bot.tweet_provider()
-speed_bot.shutdown_web_driver()
+if __name__ == "__main__":
+    speed_bot = InternetSpeedTwitterBot(CHROME_DRIVER_PATH)
+    speed_bot.get_internet_speed()
+    if float(speed_bot.down) < float(PROMISED_DOWN):
+        print("The internet speed is slower than promised")
+        if TWITTER_EMAIL:
+            speed_bot.tweet_provider()
+    speed_bot.shutdown_web_driver()
